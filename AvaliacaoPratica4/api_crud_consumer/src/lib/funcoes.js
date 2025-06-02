@@ -38,7 +38,6 @@ async function listarProdutosComFornecedores() {
         axios.get('http://localhost:3000/produtos'),
         axios.get('http://localhost:3000/fornecedores')
     ])
-
     .then((results) => {
         const produtos = results[0].data; // Array de produtos
         const fornecedores = results[1].data; // Array de fornecedores
@@ -55,31 +54,24 @@ async function listarProdutosComFornecedores() {
             console.log(`${elemento._id} - ${elemento.nome} (${elemento.nomeForn})`);
         });
         console.log('--------------------------------------------');
-        }
-        )
-        .catch((error) => console.log('ERRO: ' + error));
+    })
+    .catch((error) => console.log('ERRO: ' + error));
 }
 
 async function adicionarProduto() {
     const produto = new Produto();
     produto.nome = input.question('Digite o nome do produto: ');
-    produto.qtdeEstoque = parseInt(input.question('Digite a quantidade em estoque: ')
-);
+    produto.qtdeEstoque = parseInt(input.question('Digite a quantidade em estoque: '));
     produto.preco = parseFloat(input.question('Digite o preço: '));
     try {
-        // Lista fornecedores para obter o _id do fornecedor que fornece o produto
-        // que está sendo cadastrado
         await axios.get('http://localhost:3000/fornecedores').then((result) => {
             const vetFornecedores = result.data.map((elemForn) => elemForn.nome)
             console.log('Selecione abaixo o fornecedor para o produto:')
-            const opcao = parseInt(input.keyInSelect(vetFornecedores, 'Digite a opção: ', { cancel: 'null' })); // CANCEL = -1
+            const opcao = parseInt(input.keyInSelect(vetFornecedores, 'Digite a opção: ', { cancel: 'null' }));
             produto._idFornFK = opcao >= 0 ? opcao + 1 : null;
             console.log(`Fornecedor selecionado: ${produto._idFornFK}${produto._idFornFK ? '-' + vetFornecedores[produto._idFornFK - 1] : ''}`);
         });
-
-    // Cadastra o produto
-    await axios.post('http://localhost:3000/produtos', produto).then((result) =>
-        console.log(result.data.message));
+        await axios.post('http://localhost:3000/produtos', produto).then((result) => console.log(result.data.message));
     } catch (error) {
         console.log('ERRO: ' + error);
     }
