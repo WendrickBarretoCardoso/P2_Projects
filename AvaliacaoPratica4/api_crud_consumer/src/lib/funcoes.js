@@ -1,4 +1,5 @@
 // Importação de pacote para entrada de dados
+
 const input = require('readline-sync');
 
 // Importação do cliente HTTP AXIOS
