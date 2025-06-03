@@ -1,10 +1,10 @@
 class SysUsers {
-    constructor(id, name, login, password, userType) {
+    constructor(id, name, login_email, password, user_type) {
         this.id = id;
         this.name = name;
-        this.login = login;
+        this.login_email = login_email;
         this.password = password;
-        this.userType = userType;
+        this.user_type = user_type;
     }
 }
 

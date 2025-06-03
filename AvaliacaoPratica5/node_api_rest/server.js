@@ -1,78 +1,87 @@
 require("dotenv").config();
 
 //Conectar no bdd
+const { execSQLQuery } = require("./db");
 const port = process.env.PORT;
-const config = {
-  user: 'Wendrick',
-  password: 'Wendrick123',
-  server: 'LAPTOP-9KO5IIE2', // ou IP, exemplo: '127.0.0.1'
-  port: 1433,           // precisa estar habilitada
-  database: 'demo_flight',
-  options: {
-    encrypt: false, // ou true se estiver usando SSL
-    trustServerCertificate: true // importante se estiver com problema de certificado
-  }
-};
-
-const sql = require('mssql');
 
 // Chamando express como função
 const express = require("express");
 const app = express();
+app.use(express.json()); 
 
-app.use(express.json);
+// Retornar todos os GETS, INSERT, PACTH, DELETE
+app.get("/aircraft", async (req, res) => {
+    const results = await execSQLQuery("SELECT * FROM aircraft");
+    res.json(results);
+}) 
 
-// Conectar e Reconectar no BDD
-let connection = null;
-async function getConnection() {
-    if(connection) {
-        return connection;
-    }
-    await sql.connect(config);
-    return connection;
-}
-
-// Realizar Querys no Banco pra nãp ficar repetindo
-async function execSQLQuery(sqlQry) {
-    await getConnection();
-    const request = new sql.Request();
-    const { recordset } = await request.query(sqlQry);
-    return recordset;
-}
-
-app.post("/sysUser", async (req, res) => {
-    const sysUsers = new sysUsers();
-    sysUsers.id = input.question("Digite o id do User: ");
-    sysUsers.name = input.question("Digite o nome do User: ");
-    sysUsers.login = input.question("Digite o email de login do User: ")
-    sysUsers.password = input.question("Digite a senha para login do User: ")
-    let queijo = parseInt(input.question("Digite 1 para usuário admin e 2 para usuário regular: "));
-    if (queijo === 1) {
-        sysUsers.userType = 'admin';
-    } else if (queijo === 2) {
-        sysUsers.userType = 'regular';
-    } else {
-        console.log("Como a informação dita foi errada, o usuário criado estára inativo.")
-        sysUsers.userType = 'inativo';
-    }
-    await execSQLQuery(`INSERT INTO sys_users(id, name, login_email, password, user_type) values (${sysUsers.id}, ${sysUsers.name}, ${sysUsers.login}, ${sysUsers.password}, ${sysUsers.userType})`)
-    res.sendStatus(201);
+app.get("/boardingPass", async (req, res) => {
+    const results = await execSQLQuery("SELECT * FROM boarding_pass");
+    res.json(results);
 })
 
-app.use("/sysUser/:id", async (req, res) => {
+app.get("/flight", async (req, res) => {
+    const results = await execSQLQuery("SELECT * FROM flight");
+    res.json(results);
+}) 
+
+app.get("/passenger", async (req, res) => {
+    const results = await execSQLQuery("SELECT * FROM passenger");
+    res.json(results);
+})
+
+app.delete("/sysUser/:id", async (req, res) => {
+    try {
+        console.log(req.body);
+        const id = parseInt(req.params.id);
+        await execSQLQuery(`DELETE sys_user WHERE id=${id}`)
+        res.sendStatus(204);
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({ error: 'Erro interno' });
+    }
+})
+
+app.patch("/sysUser/:id", async (req, res) => {
+    try {
+        console.log(req.body);
+        const id = parseInt(req.params.id);
+        const { name, login_email, password, user_type } = req.body;
+        await execSQLQuery(`UPDATE sys_user SET name='${name}', login_email='${login_email}', password='${password}', user_type='${user_type}' 
+            WHERE id=${id}`);
+        res.sendStatus(200);
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({ error: 'Erro interno' });
+    }
+})
+
+app.post("/sysUser", async (req, res) => {
+    try {
+        console.log(req.body);
+        const { name, login_email, password, user_type } = req.body;
+        await execSQLQuery(`INSERT INTO sys_user (name,login_email,password,user_type) 
+            VALUES ('${name}','${login_email}','${password}','${user_type}')`);
+        res.sendStatus(200);
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({ error: 'Erro interno' });
+    }
+})
+
+app.get("/sysUser/:id", async (req, res) => {
     const id = parseInt(req.params.id);
     const results = await execSQLQuery("SELECT * FROM sys_user WHERE id = " + id);
     res.json(results);
 }) 
 
-// Retornar todos os sysUsers
-app.use("/sysUser", async (req, res) => {
+app.get("/sysUser", async (req, res) => {
     const results = await execSQLQuery("SELECT * FROM sys_user");
     res.json(results);
 }) 
 
 // First Page
-app.use("/", (req, res) => {
+app.get("/", (req, res) => {
     res.json("Hello World!");
 })
 

@@ -1,8 +1,8 @@
 class Aircraft {
-    constructor (id, model, manuf, capacity) {
-        this.id = id;
+    constructor (aircraft_id, model, manufacturer, capacity) {
+        this.aircraft_id = aircraft_id;
         this.model = model;
-        this.manuf = manuf;
+        this.manufacturer = manufacturer;
         this.capacity = capacity;
     }
 }
