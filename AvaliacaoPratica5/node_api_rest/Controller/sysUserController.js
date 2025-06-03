@@ -1,4 +1,4 @@
-const { execSQLQuery } = require("../db");
+const { execSQLQuery } = require("../Config/db");
 
 exports.getAllSysUsers = async (req, res) => {
     const results = await execSQLQuery("SELECT * FROM sys_user");
