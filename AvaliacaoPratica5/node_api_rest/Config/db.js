@@ -1,15 +1,3 @@
-const config = {
-  user: 'Wendrick',
-  password: 'Waldeckleila1',
-  server: 'LAPTOP-9KO5IIE2',
-  port: 1433, 
-  database: 'demo_flight',
-  options: {
-    encrypt: false, // ou true se estiver usando SSL
-    trustServerCertificate: true // importante se estiver com problema de certificado
-  }
-};
-
 const sql = require('mssql');
 
 // Conectar e Reconectar no BDD
