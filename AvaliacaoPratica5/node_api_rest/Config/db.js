@@ -15,4 +15,5 @@ async function execSQLQuery(sqlQry) {
 
 module.exports = {
     execSQLQuery
+
 }
