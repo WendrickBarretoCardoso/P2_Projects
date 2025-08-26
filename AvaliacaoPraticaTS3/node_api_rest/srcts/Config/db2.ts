@@ -20,7 +20,7 @@ async function getConnection() {
 getConnection();
 
 // Realizar Querys no Banco pra nãp ficar repetindo
-async function execSQLQuery(sqlQry) {
+async function execSQLQuery(sqlQry: any) {
     const request = new sql.Request();  
     const { recordset } = await request.query(sqlQry);
     return recordset;
