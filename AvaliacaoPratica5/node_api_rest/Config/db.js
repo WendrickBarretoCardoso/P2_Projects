@@ -1,6 +1,6 @@
 const config = {
   user: 'Wendrick',
-  password: 'Wendrick123',
+  password: 'Waldeckleila1',
   server: 'LAPTOP-9KO5IIE2',
   port: 1433, 
   database: 'demo_flight',

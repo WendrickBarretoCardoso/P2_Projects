@@ -2,6 +2,7 @@ require("dotenv").config();
 
 // Chamando express como função
 const express = require("express");
+const autocannon = require('autocannon');
 const app = express();
 const aircraftRoutes = require("./Routes/aircraftRoutes");
 const boardingPassRoutes = require("./Routes/boardingPassRoutes");
@@ -9,6 +10,7 @@ const flightRoutes = require("./Routes/flightRoutes");
 const passengerRoutes = require("./Routes/passengerRoutes");
 const sysUserRoutes = require("./Routes/sysUserRoutes");
 const { execSQLQuery } = require("./Config/db");
+
 
 app.use(express.json()); 
 
